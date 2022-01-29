@@ -9,7 +9,7 @@ const dbURI = process.env.MONGO_URI || 'mongodb://localhost:27017';
 app.use(express.json());
 app.use(express.urlencoded({extended: true}))
 app.use(cors())
-
+const College = require('./Models/Colleges');
 
 
 mongoose.connect(dbURI,{useNewUrlParser:true,useUnifiedTopology:true})
@@ -19,6 +19,7 @@ mongoose.connect(dbURI,{useNewUrlParser:true,useUnifiedTopology:true})
 .catch((err)=>{
     console.log(err);
 })
+
 
 
 
