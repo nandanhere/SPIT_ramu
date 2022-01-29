@@ -111,7 +111,7 @@ class CollegeCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
                         margin: const EdgeInsets.only(top: 5.0),
@@ -132,7 +132,7 @@ class CollegeCard extends StatelessWidget {
                       Container(
                         margin: const EdgeInsets.only(top: 5.0),
                         color: Colors.black54,
-                        alignment: Alignment.centerRight,
+                        alignment: Alignment.centerLeft,
                         height: 2,
                         width: width / 4,
                       ),

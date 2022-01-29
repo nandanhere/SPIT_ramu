@@ -69,7 +69,6 @@ class _MyHomePageState extends State<MyHomePage> {
       int ct = 0;
       List top = dict["data"]["children"];
       for (int i = 0; i < top.length; i++) {
-        print(top[i]["data"]["title"].length);
         if (ct > 10) {
           break;
         }
