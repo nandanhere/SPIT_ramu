@@ -45,6 +45,6 @@ const CollegeSchema=new Schema({
     
 })
 
-const College=mongoose.model('users',CollegeSchema)
+const College=mongoose.model('colleges',CollegeSchema)
 
 module.exports = College;
