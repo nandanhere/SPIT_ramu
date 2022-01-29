@@ -1,8 +1,10 @@
 import 'dart:io';
 import 'dart:ui';
+import 'package:college_helper/home/widgets/collegeCard.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'helpers/location_helper.dart';
 
 class MapScreen extends StatefulWidget {
@@ -14,19 +16,10 @@ class MapScreen extends StatefulWidget {
 class _MapScreenState extends State<MapScreen> {
   LatLng _pickedLocation = LatLng(0.0, 0.0);
   String address = "";
-  void _selectLocation(LatLng position) async {
-    setState(() {
-      _pickedLocation = position;
-      address = "";
-    });
-    try {
-      address = await LocationHelper.getPlaceAddress(
-          position.latitude, position.longitude);
-    } finally {}
-  }
+  bool selected = false;
 
   _onMapCreated(GoogleMapController controller) {
-    if (mounted)
+    if (mounted) {
       setState(() {
         controller.setMapStyle(""" [
     {
@@ -37,10 +30,12 @@ class _MapScreenState extends State<MapScreen> {
     }
   ]""");
       });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
     final Object? args = ModalRoute.of(context)?.settings.arguments;
     Map<String, Map<String, String>> potholes = (args! as Map)['potholes'];
     double lat = double.parse((args as Map)['lat']);
@@ -57,7 +52,12 @@ class _MapScreenState extends State<MapScreen> {
         markerId: MarkerId(k),
         position: LatLng(
             double.parse(v['lat'] ?? "0.0"), double.parse(v['lng'] ?? "0.0")),
-        onTap: () => print(v['id']),
+        onTap: () {
+          print(v['id']);
+          setState(() {
+            selected = true;
+          });
+        },
       ));
     });
     return Scaffold(
@@ -69,32 +69,39 @@ class _MapScreenState extends State<MapScreen> {
             bottomRight: Radius.circular(20),
           ),
         ),
-        iconTheme: IconThemeData(color: Colors.black),
-        title: FittedBox(
+        iconTheme: const IconThemeData(color: Colors.black),
+        title: const FittedBox(
           child: Text(
-            "Register a complaint",
+            "Colleges Near you",
             style: TextStyle(color: Colors.black),
           ),
         ),
       ),
-      body: Stack(
-        children: [
-          GoogleMap(
+      body: selected
+          ? SlidingUpPanel(
+              renderPanelSheet: false,
+              panelBuilder: (_) => CollegeCard(
+                width: width,
+                title: "Ramaiah Institute Of Technology",
+                address: "MSR Nagar, Bangalore",
+                imgUrl:
+                    'https://www.iesonline.co.in/colleges-image/ramaiah-institute-of-technology.jpg',
+              ),
+              body: GoogleMap(
+                  onMapCreated: _onMapCreated,
+                  myLocationButtonEnabled: true,
+                  myLocationEnabled: true,
+                  initialCameraPosition:
+                      CameraPosition(zoom: 18, target: LatLng(lat, lng)),
+                  markers: {...marklist}),
+            )
+          : GoogleMap(
               onMapCreated: _onMapCreated,
               myLocationButtonEnabled: true,
               myLocationEnabled: true,
               initialCameraPosition:
                   CameraPosition(zoom: 18, target: LatLng(lat, lng)),
               markers: {...marklist}),
-          Container(
-            height: MediaQuery.of(context).size.height * 5 / 6,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.end,
-            ),
-          )
-        ],
-      ),
     );
   }
 }
