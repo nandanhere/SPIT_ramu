@@ -1,6 +1,8 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:college_helper/home/utils/color_gen.dart';
 import 'package:college_helper/home/widgets/collegeCard.dart';
+import 'package:college_helper/home/widgets/discussCard.dart';
+import 'package:college_helper/home/widgets/titleText.dart';
 import 'package:college_helper/map_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -16,6 +18,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
+    String name = "Jayant Sogikar";
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return SafeArea(
@@ -57,20 +60,10 @@ class _MyHomePageState extends State<MyHomePage> {
           // Center is a layout widget. It takes a single child and positions it
           // in the middle of the parent.
           child: Padding(
-            padding: const EdgeInsets.only(top: 15.0, left: 10, right: 10),
+            padding: const EdgeInsets.only(top: 15.0),
             child: Column(
               children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Colleges Nearby',
-                      style: GoogleFonts.raleway(
-                          textStyle: const TextStyle(
-                              fontSize: 40, color: Color(0xff060606))),
-                    ),
-                  ],
-                ),
+                TitleText(title: "Colleges Nearby"),
                 const SizedBox(
                   height: 15,
                 ),
@@ -107,6 +100,34 @@ class _MyHomePageState extends State<MyHomePage> {
                                     borderRadius: BorderRadius.circular(18.0),
                                     side:
                                         BorderSide(color: Colors.red[200]!)))),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 5.0),
+                  child: TitleText(title: "Discussions"),
+                ),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      discussCard(
+                        name: name,
+                        title: "How are we doing today?",
+                      ),
+                      discussCard(
+                        name: name,
+                        title: "What's the best college in Karantaka?",
+                      ),
+                      discussCard(
+                        name: name,
+                        title: "Omg, I failed every enterance test!",
+                      ),
+                      discussCard(
+                        name: name,
+                        title: "How to get into college without 12th?",
+                      ),
+                    ],
                   ),
                 )
               ],

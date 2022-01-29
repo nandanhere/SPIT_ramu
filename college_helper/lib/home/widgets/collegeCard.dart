@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:college_helper/home/utils/color_gen.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -19,7 +20,7 @@ class CollegeCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: 10),
+      margin: EdgeInsets.only(top: 10, right: 10, left: 10),
       width: width - 20,
       height: 150,
       decoration: BoxDecoration(
@@ -30,12 +31,24 @@ class CollegeCard extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.only(left: 20.0),
-            child: Image.network(
-              imgUrl,
+            child: CachedNetworkImage(
+              imageUrl: imgUrl,
+              placeholder: (context, url) => const Center(
+                child: CircularProgressIndicator(),
+              ),
+              errorWidget: (context, url, error) => const Center(
+                child: CircularProgressIndicator(),
+              ),
               width: width / 2 - 20,
               height: 150,
               fit: BoxFit.fitHeight,
             ),
+            // child: Image.network(
+            //   imgUrl,
+            // width: width / 2 - 20,
+            // height: 150,
+            // fit: BoxFit.fitHeight,
+            // ),
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
@@ -43,7 +56,7 @@ class CollegeCard extends StatelessWidget {
               Container(
                 margin: const EdgeInsets.only(top: 5.0),
                 padding: const EdgeInsets.only(right: 10.0),
-                width: width / 2 - 40,
+                width: width / 2 - 35,
                 child: AutoSizeText(
                   title,
                   textAlign: TextAlign.end,
@@ -52,8 +65,8 @@ class CollegeCard extends StatelessWidget {
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   style: GoogleFonts.raleway(
-                      textStyle: const TextStyle(
-                          fontSize: 33, color: Color(0xff565656))),
+                      textStyle:
+                          TextStyle(fontSize: 33, color: Color(0xff565656))),
                 ),
               ),
               Container(
