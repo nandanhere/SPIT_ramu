@@ -20,6 +20,8 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     String name = "Jayant Sogikar";
     double width = MediaQuery.of(context).size.width;
+    int h = DateTime.now().hour;
+
     double height = MediaQuery.of(context).size.height;
     return SafeArea(
       child: Scaffold(
@@ -47,7 +49,11 @@ class _MyHomePageState extends State<MyHomePage> {
             children: [
               SizedBox(width: 5),
               Text(
-                "Good Morning!",
+                (h > 6 && h < 12)
+                    ? "Good Morning!"
+                    : (h <= 17)
+                        ? "Good Afternoon!"
+                        : "Good Evening!",
                 // style: TextStyle(fontSize: 35, color: Color(0xff595959)),
                 style: GoogleFonts.raleway(
                     textStyle: const TextStyle(
