@@ -43,7 +43,7 @@ class CollegeElement {
   CollegeCollege college;
   String id;
   String address;
-  List<int> coordinates;
+  List<double> coordinates;
   int hostelFees;
   int collegeFees;
   List<Branch> branches;
@@ -53,7 +53,7 @@ class CollegeElement {
         college: CollegeCollege.fromJson(json["college"]),
         id: json["_id"] == null ? null : json["_id"],
         address: json["address"] == null ? null : json["address"],
-        coordinates: List<int>.from(json["coordinates"].map((x) => x)),
+        coordinates: List<double>.from(json["coordinates"].map((x) => x)),
         hostelFees: json["hostelFees"] == null ? null : json["hostelFees"],
         collegeFees: json["collegeFees"] == null ? null : json["collegeFees"],
         branches:

@@ -196,6 +196,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           desiredAccuracy: LocationAccuracy.high);
                       Navigator.of(context)
                           .pushNamed(MapScreen.routeName, arguments: {
+                        "deets": deets,
                         "location": "myLocation",
                         "colleges": colleges,
                         'lat': position.latitude.toString(),

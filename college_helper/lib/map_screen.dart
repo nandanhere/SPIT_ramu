@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:ui';
 import 'package:college_helper/home/widgets/collegeCard.dart';
+import 'package:college_helper/models/collegeDetails.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
@@ -36,38 +37,35 @@ class _MapScreenState extends State<MapScreen> {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     final Object? args = ModalRoute.of(context)?.settings.arguments;
-    Map<String, Map<String, String>> colleges = (args! as Map)['colleges'];
     double lat = double.parse((args as Map)['lat']);
-
+    CollegeDetail deets = (args as Map)['deets'];
+    print(deets.colleges.length);
     double lng = double.parse((args as Map)['lng']);
     List<Marker> marklist = [];
-    colleges.forEach((k, v) {
+    for (int i = 0; i < deets.colleges.length; i++) {
+      CollegeElement v = deets.colleges[i];
       marklist.add(Marker(
         icon: BitmapDescriptor.defaultMarkerWithHue(200),
         flat: true,
-        markerId: MarkerId(k),
-        position: LatLng(
-            double.parse(v['lat'] ?? "0.0"), double.parse(v['lng'] ?? "0.0")),
+        markerId: MarkerId(deets.colleges[i].id),
+        position: LatLng(v.coordinates[0], v.coordinates[1]),
         onTap: () {
           showModalBottomSheet(
               context: context,
               backgroundColor: Colors.transparent,
               builder: (BuildContext context) {
                 return Padding(
-                  padding: const EdgeInsets.only(bottom: 10.0),
-                  child: CollegeCard(
-                    i: 0,
-                    width: width,
-                    title: "Ramaiah Institute Of Technology",
-                    address: "MSR Nagar, Bangalore",
-                    imgUrl:
-                        'https://www.iesonline.co.in/colleges-image/ramaiah-institute-of-technology.jpg',
-                  ),
-                );
+                    padding: const EdgeInsets.only(bottom: 10.0),
+                    child: CollegeCard(
+                        i: i,
+                        width: width,
+                        title: v.college.name,
+                        address: v.address,
+                        imgUrl: v.imageUrls[0]));
               });
         },
       ));
-    });
+    }
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xfff0f0f0),
