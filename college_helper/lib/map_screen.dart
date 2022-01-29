@@ -60,6 +60,7 @@ class _MapScreenState extends State<MapScreen> {
                 return Padding(
                   padding: const EdgeInsets.only(bottom: 10.0),
                   child: CollegeCard(
+                    i: 0,
                     width: width,
                     title: "Ramaiah Institute Of Technology",
                     address: "MSR Nagar, Bangalore",
