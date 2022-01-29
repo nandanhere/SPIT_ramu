@@ -4,9 +4,15 @@ const Schema=mongoose.Schema;
 
 
 const CollegeSchema=new Schema({
-    name: {
-        type: String,
-        required: true
+    college: {
+        name:{
+            type: String,
+            required: true
+        },
+        website : {
+            type: String,
+            required: true
+        }
       },
     address: {
         type: String,
