@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:college_helper/home/screens/chatPage.dart';
 import 'package:college_helper/home/utils/color_gen.dart';
 import 'package:college_helper/home/widgets/collegeCard.dart';
 import 'package:college_helper/home/widgets/discussCard.dart';
@@ -125,7 +126,22 @@ class _MyHomePageState extends State<MyHomePage> {
                           textStyle: const TextStyle(
                               fontSize: 16, color: Color(0xff565656))),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      Map<String, Map<String, String>> potholes = {
+                        "MSRIT": {
+                          "id": "Ramaiah",
+                          "lat": "13.038293",
+                          "lng": "77.566676"
+                        }
+                      };
+                      Navigator.of(context)
+                          .pushNamed(MapScreen.routeName, arguments: {
+                        "location": "myLocation",
+                        "potholes": potholes,
+                        'lat': "13.027967025983433",
+                        'lng': "77.56988895055157"
+                      });
+                    },
                     style: ButtonStyle(
                         backgroundColor:
                             MaterialStateProperty.all<Color>(Colors.blue[100]!),
@@ -172,15 +188,9 @@ class _MyHomePageState extends State<MyHomePage> {
         floatingActionButton: FloatingActionButton(
           backgroundColor: Colors.deepOrange[100],
           onPressed: () {
-            Map<String, Map<String, String>> potholes = {
-              "MSRIT": {"id": "Ramaiah", "lat": "13.038293", "lng": "77.566676"}
-            };
-            Navigator.of(context).pushNamed(MapScreen.routeName, arguments: {
-              "location": "myLocation",
-              "potholes": potholes,
-              'lat': "13.027967025983433",
-              'lng': "77.56988895055157"
-            });
+            Navigator.of(context).pushNamed(
+              ChatPage.routeName,
+            );
           },
           tooltip: 'Chat With Us',
           child: const Icon(
