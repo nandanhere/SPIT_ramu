@@ -4,7 +4,6 @@ import 'package:college_helper/home/widgets/collegeCard.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
-import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'helpers/location_helper.dart';
 
 class MapScreen extends StatefulWidget {
@@ -37,15 +36,12 @@ class _MapScreenState extends State<MapScreen> {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     final Object? args = ModalRoute.of(context)?.settings.arguments;
-    Map<String, Map<String, String>> potholes = (args! as Map)['potholes'];
+    Map<String, Map<String, String>> colleges = (args! as Map)['colleges'];
     double lat = double.parse((args as Map)['lat']);
 
     double lng = double.parse((args as Map)['lng']);
     List<Marker> marklist = [];
-    potholes.forEach((k, v) {
-      print(k);
-      print(v);
-      print("marklist made");
+    colleges.forEach((k, v) {
       marklist.add(Marker(
         icon: BitmapDescriptor.defaultMarkerWithHue(200),
         flat: true,
@@ -89,31 +85,13 @@ class _MapScreenState extends State<MapScreen> {
           ),
         ),
       ),
-      body:
-          // ? SlidingUpPanel(
-          //     renderPanelSheet: false,
-          // panelBuilder: (_) => CollegeCard(
-          //   width: width,
-          //   title: "Ramaiah Institute Of Technology",
-          //   address: "MSR Nagar, Bangalore",
-          //   imgUrl:
-          //       'https://www.iesonline.co.in/colleges-image/ramaiah-institute-of-technology.jpg',
-          // ),
-          //     body: GoogleMap(
-          //         onMapCreated: _onMapCreated,
-          //         myLocationButtonEnabled: true,
-          //         myLocationEnabled: true,
-          //         initialCameraPosition:
-          //             CameraPosition(zoom: 18, target: LatLng(lat, lng)),
-          //         markers: {...marklist}),
-          //   )
-          GoogleMap(
-              onMapCreated: _onMapCreated,
-              myLocationButtonEnabled: true,
-              myLocationEnabled: true,
-              initialCameraPosition:
-                  CameraPosition(zoom: 18, target: LatLng(lat, lng)),
-              markers: {...marklist}),
+      body: GoogleMap(
+          onMapCreated: _onMapCreated,
+          myLocationButtonEnabled: true,
+          myLocationEnabled: true,
+          initialCameraPosition:
+              CameraPosition(zoom: 15, target: LatLng(lat, lng)),
+          markers: {...marklist}),
     );
   }
 }

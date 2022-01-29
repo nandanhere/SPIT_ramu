@@ -13,6 +13,7 @@ import 'package:college_helper/models/collegeDetails.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
+import 'package:geolocator/geolocator.dart';
 
 CollegeDetail deets = CollegeDetail(colleges: []);
 
@@ -183,20 +184,22 @@ class _MyHomePageState extends State<MyHomePage> {
                           textStyle: const TextStyle(
                               fontSize: 16, color: Color(0xff565656))),
                     ),
-                    onPressed: () {
-                      Map<String, Map<String, String>> potholes = {
+                    onPressed: () async {
+                      Map<String, Map<String, String>> colleges = {
                         "MSRIT": {
                           "id": "Ramaiah",
                           "lat": "13.038293",
                           "lng": "77.566676"
                         }
                       };
+                      Position position = await Geolocator.getCurrentPosition(
+                          desiredAccuracy: LocationAccuracy.high);
                       Navigator.of(context)
                           .pushNamed(MapScreen.routeName, arguments: {
                         "location": "myLocation",
-                        "potholes": potholes,
-                        'lat': "13.027967025983433",
-                        'lng': "77.56988895055157"
+                        "colleges": colleges,
+                        'lat': position.latitude.toString(),
+                        'lng': position.longitude.toString()
                       });
                     },
                     style: ButtonStyle(

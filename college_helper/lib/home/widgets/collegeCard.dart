@@ -29,7 +29,7 @@ class CollegeCard extends StatelessWidget {
             builder: (context) => CollegePage(clg: deets.colleges[i])),
       ),
       child: Container(
-        margin: EdgeInsets.only(top: 10, right: 10, left: 10),
+        margin: const EdgeInsets.only(top: 10, right: 10, left: 10),
         width: width - 20,
         height: 150,
         decoration: BoxDecoration(
@@ -75,7 +75,7 @@ class CollegeCard extends StatelessWidget {
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                           style: GoogleFonts.raleway(
-                              textStyle: TextStyle(
+                              textStyle: const TextStyle(
                                   fontSize: 33, color: Color(0xff565656))),
                         ),
                       ),
@@ -124,7 +124,7 @@ class CollegeCard extends StatelessWidget {
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                           style: GoogleFonts.raleway(
-                              textStyle: TextStyle(
+                              textStyle: const TextStyle(
                                   fontSize: 33, color: Color(0xff565656))),
                         ),
                       ),
