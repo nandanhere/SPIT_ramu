@@ -3,6 +3,8 @@ import 'package:college_helper/map_screen.dart';
 import 'package:flutter/material.dart';
 
 class CollegePage extends StatelessWidget {
+  static const routeName = "/collegePage";
+
   final collegeName;
   final urls;
   final desc;
@@ -71,6 +73,5 @@ class CollegePage extends StatelessWidget {
         ), // This trailing comma makes auto-formatting nicer for build methods.
       ),
     );
-    ;
   }
 }

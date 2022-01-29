@@ -1,3 +1,4 @@
+import 'package:college_helper/home/screens/collegePage.dart';
 import 'package:college_helper/map_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -20,6 +21,9 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
         ),
         home: const MyHomePage(title: 'Flutter Demo Home Page'),
-        routes: {MapScreen.routeName: (ctx) => MapScreen()});
+        routes: {
+          MapScreen.routeName: (ctx) => MapScreen(),
+          CollegePage.routeName: (ctx) => CollegePage()
+        });
   }
 }
