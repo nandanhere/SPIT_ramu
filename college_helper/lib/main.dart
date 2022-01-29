@@ -23,24 +23,28 @@ class MyApp extends StatelessWidget {
     return FutureBuilder(
       future: SharedPreferences.getInstance(),
       builder: (context, snapshot) {
-        SharedPreferences a = snapshot.data as SharedPreferences;
-        bool val = a.getBool("dataThere") ?? false;
-        a.clear();
-        return MaterialApp(
-            title: 'Flutter Demo',
-            debugShowCheckedModeBanner: false,
-            theme: ThemeData(
-              primarySwatch: Colors.blue,
-            ),
-            home: val
-                ? const MyHomePage(
-                    title: "welcome",
-                  )
-                : ChatPage(),
-            routes: {
-              MapScreen.routeName: (ctx) => MapScreen(),
-              ChatPage.routeName: (ctx) => ChatPage(),
-            });
+        if (snapshot.data == null) {
+          return CircularProgressIndicator();
+        } else {
+          SharedPreferences a = snapshot.data as SharedPreferences;
+          bool val = a.getBool("dataThere") ?? false;
+          a.clear();
+          return MaterialApp(
+              title: 'Flutter Demo',
+              debugShowCheckedModeBanner: false,
+              theme: ThemeData(
+                primarySwatch: Colors.blue,
+              ),
+              home: val
+                  ? const MyHomePage(
+                      title: "welcome",
+                    )
+                  : ChatPage(),
+              routes: {
+                MapScreen.routeName: (ctx) => MapScreen(),
+                ChatPage.routeName: (ctx) => ChatPage(),
+              });
+        }
       },
     );
   }

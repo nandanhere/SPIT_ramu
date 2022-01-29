@@ -212,6 +212,9 @@ class _ChatPageState extends State<ChatPage> {
     return FutureBuilder(
       future: SharedPreferences.getInstance(),
       builder: (context, snapshot) {
+        if (snapshot.data == null) {
+          return CircularProgressIndicator();
+        }
         data = snapshot.data as SharedPreferences;
 
         if (data.getBool("dataThere") ?? false) {
