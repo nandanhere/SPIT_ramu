@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:college_helper/home/screens/homePage.dart';
 import 'package:college_helper/models/collegeDetails.dart';
 import 'package:dash_chat/dash_chat.dart';
 import 'package:flutter/material.dart';
@@ -6,8 +9,9 @@ import 'package:http/http.dart' as http;
 
 class ChatPage extends StatefulWidget {
   static const routeName = "/chatPage";
+  List<ChatMessage> messages = [];
 
-  const ChatPage({
+  ChatPage({
     Key? key,
   }) : super(key: key);
 
@@ -16,24 +20,6 @@ class ChatPage extends StatefulWidget {
 }
 
 class _ChatPageState extends State<ChatPage> {
-  CollegeDetail deets = CollegeDetail(colleges: []);
-  Future getCollegeDetails() async {
-    final response = await http.get(Uri.parse(
-        'https://fast-island-19739.herokuapp.com/api/college-details'));
-    if (response.statusCode == 200) {
-      return response.body;
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    getCollegeDetails().then((value) {
-      deets = collegeDetailFromJson(value);
-      setState(() {});
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -41,6 +27,10 @@ class _ChatPageState extends State<ChatPage> {
     double height = MediaQuery.of(context).size.height;
     int count = 0;
     String username = "";
+    int expenditure = 9999999;
+    int from = -1;
+    int to = -1;
+    List<String> subjects = [];
     List<ChatMessage> messages = [
       ChatMessage(
           text: "Hello :) i am Drishti!", user: ChatUser(name: "Drishti")),
@@ -48,15 +38,53 @@ class _ChatPageState extends State<ChatPage> {
         ChatMessage(text: "What is your name?", user: ChatUser(name: "Drishti"))
       ],
     ];
-    quickReply(val) {
-      print(val.value);
-      messages.add(ChatMessage(text: val.value, user: ChatUser()));
-      if (val.value == "no")
-        messages.add(ChatMessage(text: "Oh", user: ChatUser(name: "Drishti")));
-      else
-        messages
-            .add(ChatMessage(text: "wokay", user: ChatUser(name: "Drishti")));
+    goToHome() {
+      Navigator.of(context)
+          .pushReplacement(MaterialPageRoute(builder: (BuildContext context) {
+        return const MyHomePage(
+          title: "Here are your Results",
+        );
+      }));
     }
+
+    quickReply(val) {
+      messages.add(ChatMessage(text: val.value, user: ChatUser()));
+      if (val.value == "no") {
+        messages
+            .add(ChatMessage(text: "Okay! ", user: ChatUser(name: "Drishti")));
+      }
+      if (val.value == "EE" || val.value == "ME" || val.value == "CS") {
+        if (val.value == "EE") subjects.add("Electronic");
+        if (val.value == "ME") {
+          subjects.add("Mechanic");
+          subjects.add("Civil");
+        }
+        if (val.value == "CS") {
+          subjects.add("Computer");
+          subjects.add("Information");
+        }
+        messages.add(
+            ChatMessage(text: "Got it! ", user: ChatUser(name: "Drishti")));
+      }
+      if (val.value == "rich") {
+        messages.add(ChatMessage(
+            text: "We'll now show you your results",
+            user: ChatUser(name: "Drishti")));
+        Timer(Duration(seconds: 3), () {
+          goToHome();
+        });
+      }
+    }
+
+// TODO: check here if previous data is available
+// if data is there :
+    // count = 1
+    // messages = [
+    //   ChatMessage(
+    //     text: "do you have a particular cutoff you are searching for ?",
+    //     user: ChatUser(name: "Drishti"),
+    //   )
+    // ];
 
     onSend(ChatMessage chatmessage) {
       messages.add(chatmessage);
@@ -73,16 +101,91 @@ class _ChatPageState extends State<ChatPage> {
             quickReplies: QuickReplies(
               values: <Reply>[
                 Reply(
-                  title: "😋 Yes",
-                  value: "Yes",
-                ),
-                Reply(
-                  title: "😞 Nope. What?",
+                  title: "No, i Dont",
                   value: "no",
                 ),
               ],
             ),
           ));
+          break;
+        case 1:
+          String text = chatmessage.text ?? '1000';
+          List<String> arr = text.split(' ');
+          for (int i = 0; i < arr.length; i++) {
+            String tt = arr[i];
+            tt.replaceAll(RegExp(r'[^0-9]'), '');
+            arr[i] = tt;
+            if (from == -1 && int.tryParse(tt) != null) {
+              from = int.parse(tt);
+            } else if (to == -1 && int.tryParse(tt) != null) {
+              to = int.parse(tt);
+            }
+          }
+          messages.add(ChatMessage(
+            text: "Got it. Do you have any preferences in branches ?",
+            user: ChatUser(name: "Drishti"),
+            quickReplies: QuickReplies(
+              values: <Reply>[
+                Reply(
+                  title: "Electronics",
+                  value: "EE",
+                ),
+                Reply(
+                  title: "Mechanical",
+                  value: "ME",
+                ),
+                Reply(
+                  title: "Computers",
+                  value: "CS",
+                ),
+                Reply(
+                  title: "No, i Dont",
+                  value: "no",
+                ),
+              ],
+            ),
+          ));
+          break;
+        case 2:
+          String query = chatmessage.text ?? "ALL";
+          if (query.contains("EE") || query.contains("Electronic")) {
+            subjects.add("Electronic");
+          }
+          if (query.contains("ME") || query.contains("Mechanic")) {
+            subjects.add("Mechanic");
+            subjects.add("Civil");
+          }
+          if (query.contains("CS") || query.contains("Mechanic")) {
+            subjects.add("Computer");
+            subjects.add("Information");
+          }
+          messages
+              .add(ChatMessage(text: "Nice!", user: ChatUser(name: "Drishti")));
+          messages.add(ChatMessage(
+            text: "Now, do you have any upper limit to your expenditure?",
+            user: ChatUser(name: "Drishti"),
+            quickReplies: QuickReplies(
+              values: <Reply>[
+                Reply(
+                  title: "Not really",
+                  value: "rich",
+                ),
+              ],
+            ),
+          ));
+          break;
+
+        case 3:
+          String text = chatmessage.text ?? '10000000';
+          text.replaceAll(RegExp(r'[\w]'), "");
+          if (int.tryParse(text) != null) expenditure = int.parse(text);
+          print([username, expenditure, from, to, subjects]);
+          messages.add(ChatMessage(
+              text: "We'll now show you your results",
+              user: ChatUser(name: "Drishti")));
+          Timer(Duration(seconds: 3), () {
+            goToHome();
+          });
           break;
         default:
           messages.add(ChatMessage(
@@ -95,7 +198,7 @@ class _ChatPageState extends State<ChatPage> {
     DashChat currentChat = DashChat(
       onQuickReply: quickReply,
       messages: messages,
-      user: ChatUser(name: "AI"),
+      user: ChatUser(),
       onSend: onSend,
     );
     return SafeArea(
