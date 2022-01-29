@@ -71,7 +71,12 @@ class _MyHomePageState extends State<MyHomePage> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Map<String, Map<String, String>> potholes = {
-            "MSRIT": {"id": "Ramaiah", "lat": "13.038293", "lng": "77.566676"}
+            "MSRIT": {"id": "Ramaiah", "lat": "13.038293", "lng": "77.566676"},
+            "Ootupura": {
+              "id": "ootupura",
+              "lat": "13.033640694055306",
+              "lng": "77.56415572004174"
+            }
           };
           Navigator.of(context).pushNamed(MapScreen.routeName, arguments: {
             "location": "myLocation",

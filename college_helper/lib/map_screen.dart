@@ -25,6 +25,20 @@ class _MapScreenState extends State<MapScreen> {
     } finally {}
   }
 
+  _onMapCreated(GoogleMapController controller) {
+    if (mounted)
+      setState(() {
+        controller.setMapStyle(""" [
+    {
+      "featureType": "poi",
+      "stylers": [
+        { "visibility": "off" }
+      ]
+    }
+  ]""");
+      });
+  }
+
   @override
   Widget build(BuildContext context) {
     final Object? args = ModalRoute.of(context)?.settings.arguments;
@@ -48,8 +62,8 @@ class _MapScreenState extends State<MapScreen> {
     });
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xfff0f0f0),
-        shape: RoundedRectangleBorder(
+        backgroundColor: const Color(0xfff0f0f0),
+        shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
             bottomLeft: Radius.circular(20),
             bottomRight: Radius.circular(20),
@@ -66,6 +80,7 @@ class _MapScreenState extends State<MapScreen> {
       body: Stack(
         children: [
           GoogleMap(
+              onMapCreated: _onMapCreated,
               myLocationButtonEnabled: true,
               myLocationEnabled: true,
               initialCameraPosition:
