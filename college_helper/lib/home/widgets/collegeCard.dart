@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:college_helper/home/utils/color_gen.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -30,12 +31,24 @@ class CollegeCard extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.only(left: 20.0),
-            child: Image.network(
-              imgUrl,
+            child: CachedNetworkImage(
+              imageUrl: imgUrl,
+              placeholder: (context, url) => const Center(
+                child: CircularProgressIndicator(),
+              ),
+              errorWidget: (context, url, error) => const Center(
+                child: CircularProgressIndicator(),
+              ),
               width: width / 2 - 20,
               height: 150,
               fit: BoxFit.fitHeight,
             ),
+            // child: Image.network(
+            //   imgUrl,
+            // width: width / 2 - 20,
+            // height: 150,
+            // fit: BoxFit.fitHeight,
+            // ),
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
