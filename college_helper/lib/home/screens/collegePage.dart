@@ -54,9 +54,12 @@ class _CollegePageState extends State<CollegePage> {
     }
 
     List<Widget> imageSliders() {
-      return widget.clg.imageUrls
-          .map((a) => CarouselItem(imageUrl: a))
-          .toList();
+      List arr = widget.clg.imageUrls;
+      List<Widget> fin = [];
+      for (int i = 1; i < arr.length; i++) {
+        fin.add(CarouselItem(imageUrl: arr[i]));
+      }
+      return fin;
     }
 
     List<Widget> getBranches() {
@@ -71,7 +74,7 @@ class _CollegePageState extends State<CollegePage> {
               borderRadius: BorderRadius.all(Radius.circular(8))),
           child: Text(
             ref[i].branch.toString().toUpperCase(),
-            style: GoogleFonts.raleway(fontSize: 20),
+            style: GoogleFonts.raleway(fontSize: 11),
           ),
         ));
       }
@@ -195,9 +198,8 @@ class _CollegePageState extends State<CollegePage> {
                 ),
                 Padding(
                   padding: EdgeInsets.all(10),
-                  child: Row(children: [
-                    Wrap(spacing: 5, runSpacing: 5, children: getBranches())
-                  ]),
+                  child:
+                      Wrap(spacing: 5, runSpacing: 5, children: getBranches()),
                 ),
                 ElevatedButton(
                   onPressed: () {

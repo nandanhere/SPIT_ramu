@@ -25,6 +25,7 @@ class MyApp extends StatelessWidget {
       builder: (context, snapshot) {
         SharedPreferences a = snapshot.data as SharedPreferences;
         bool val = a.getBool("dataThere") ?? false;
+        a.clear();
         return MaterialApp(
             title: 'Flutter Demo',
             debugShowCheckedModeBanner: false,

@@ -40,7 +40,7 @@ class CollegeCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(left: 18.0),
+                    padding: const EdgeInsets.only(left: 10.0),
                     child: CachedNetworkImage(
                       imageUrl: imgUrl,
                       placeholder: (context, url) => const Center(
@@ -50,7 +50,7 @@ class CollegeCard extends StatelessWidget {
                         child: CircularProgressIndicator(),
                       ),
                       width: width / 2 - 20,
-                      height: 140,
+                      height: 120,
                       fit: BoxFit.fitHeight,
                     ),
                     // child: Image.network(
@@ -154,7 +154,7 @@ class CollegeCard extends StatelessWidget {
                     ],
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(right: 18.0),
+                    padding: const EdgeInsets.only(right: 10.0),
                     child: CachedNetworkImage(
                       imageUrl: imgUrl,
                       placeholder: (context, url) => const Center(
@@ -164,7 +164,7 @@ class CollegeCard extends StatelessWidget {
                         child: CircularProgressIndicator(),
                       ),
                       width: width / 2 - 20,
-                      height: 140,
+                      height: 120,
                       fit: BoxFit.fitHeight,
                     ),
                     // child: Image.network(

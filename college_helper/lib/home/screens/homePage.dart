@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:college_helper/home/screens/chatPage.dart';
@@ -14,8 +15,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:geolocator/geolocator.dart';
+// import 'package:location/location.dart';
 
 CollegeDetail deets = CollegeDetail(colleges: []);
+// List<Location> locations = [];
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, required this.title}) : super(key: key);
@@ -61,14 +64,22 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+  // Future locGetter(loc) async {
+  //   List await locationFromAddress("Gronausestraat 710, Enschede");
+  // }
+
   @override
   void initState() {
     super.initState();
     getCollegeDetails().then((value) {
-      // deets = collegeDetailFromJson(value);
       var dict = {"colleges": []};
       dict['colleges']!.add(jsonDecode(value)['colleges'][0]);
+      dict['colleges']!.add(jsonDecode(value)['colleges'][1]);
+      dict['colleges']!.add(jsonDecode(value)['colleges'][2]);
+
       deets = collegeDetailFromJson(jsonEncode(dict));
+      // deets = collegeDetailFromJson(value);
+
       setState(() {});
     });
     getDiscussions().then((value) {
@@ -76,6 +87,7 @@ class _MyHomePageState extends State<MyHomePage> {
       int ct = 0;
       List top = dict["data"]["children"];
       for (int i = 0; i < top.length; i++) {
+        // for (int i = 0; i < 1; i++) {
         if (ct > 10) {
           break;
         }
@@ -100,25 +112,27 @@ class _MyHomePageState extends State<MyHomePage> {
     int h = DateTime.now().hour;
     double height = MediaQuery.of(context).size.height;
     List<Widget> collegeCards = [
-      CollegeCard(
-        i: 0,
-        width: width,
-        title: "Ramaiah Institute Of Technology",
-        address: "MSR Nagar, Bangalore",
-        imgUrl:
-            'https://upload.wikimedia.org/wikipedia/en/5/5a/Ramaiah_Institutions_Logo.png',
-      ),
-      CollegeCard(
-        i: 1,
-        width: width,
-        title: "RV College Of Engineering",
-        address: "RR Nagar, Bangalore",
-        imgUrl:
-            'https://upload.wikimedia.org/wikipedia/en/5/5a/Ramaiah_Institutions_Logo.png',
-      ),
+      // CollegeCard(
+      //   i: 0,
+      //   width: width,
+      //   title: "Ramaiah Institute Of Technology",
+      //   address: "MSR Nagar, Bangalore",
+      //   imgUrl:
+      //       'https://upload.wikimedia.org/wikipedia/en/5/5a/Ramaiah_Institutions_Logo.png',
+      // ),
+      // CollegeCard(
+      //   i: 1,
+      //   width: width,
+      //   title: "RV College Of Engineering",
+      //   address: "RR Nagar, Bangalore",
+      //   imgUrl:
+      //       'https://upload.wikimedia.org/wikipedia/en/5/5a/Ramaiah_Institutions_Logo.png',
+      // ),
     ];
-    int ct = 2;
-    for (int i = 0; i < deets.colleges.length; i++) {
+    int ct = 0;
+    // for (int i = 0; i < deets.colleges.length; i++) {
+    // print(deets.colleges[0]);
+    for (int i = 0; i < min(deets.colleges.length, 3); i++) {
       collegeCards.add(CollegeCard(
           i: ct,
           width: width,
