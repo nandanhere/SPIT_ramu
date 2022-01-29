@@ -1,3 +1,7 @@
+// ignore_for_file: prefer_const_constructors
+
+import 'dart:convert';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:college_helper/home/utils/color_gen.dart';
 import 'package:college_helper/home/widgets/collegeCard.dart';
@@ -18,10 +22,36 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  List<Widget> allDiscussions = [
+    discussCard(
+        name: "Jayant Sogikar",
+        title: "How are we doing today?",
+        url: "https://www.google.com/"),
+    discussCard(
+        name: "Jayant Sogikar",
+        title: "What's the best college in Karantaka?",
+        url: "https://www.google.com/"),
+    discussCard(
+        name: "Jayant Sogikar",
+        title: "Omg, I failed every enterance test!",
+        url: "https://www.google.com/"),
+    discussCard(
+        name: "Jayant Sogikar",
+        title: "How to get into college without 12th?",
+        url: "https://www.google.com/"),
+  ];
   CollegeDetail deets = CollegeDetail(colleges: []);
   Future getCollegeDetails() async {
     final response = await http.get(Uri.parse(
         'https://fast-island-19739.herokuapp.com/api/college-details'));
+    if (response.statusCode == 200) {
+      return response.body;
+    }
+  }
+
+  Future getDiscussions() async {
+    final response = await http.get(Uri.parse(
+        'https://www.reddit.com/r/Indian_Academia/top.json?limit=100&t=year'));
     if (response.statusCode == 200) {
       return response.body;
     }
@@ -34,32 +64,56 @@ class _MyHomePageState extends State<MyHomePage> {
       deets = collegeDetailFromJson(value);
       setState(() {});
     });
+    getDiscussions().then((value) {
+      Map dict = jsonDecode(value);
+      int ct = 0;
+      List top = dict["data"]["children"];
+      for (int i = 0; i < top.length; i++) {
+        print(top[i]["data"]["title"].length);
+        if (ct > 10) {
+          break;
+        }
+        if (top[i]["data"]["title"].length <= 50 &&
+            top[i]["data"]["over_18"] == false) {
+          ct += 1;
+          allDiscussions.add(discussCard(
+            title: top[i]["data"]["title"],
+            name: top[i]["data"]["author"],
+            url: top[i]["data"]["url"],
+          ));
+        }
+      }
+      setState(() {});
+      // print(dict["data"]);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    String name = "Jayant Sogikar";
     double width = MediaQuery.of(context).size.width;
     int h = DateTime.now().hour;
     double height = MediaQuery.of(context).size.height;
     List<Widget> collegeCards = [
       CollegeCard(
+        i: 0,
         width: width,
         title: "Ramaiah Institute Of Technology",
         address: "MSR Nagar, Bangalore",
         imgUrl:
-            'https://www.iesonline.co.in/colleges-image/ramaiah-institute-of-technology.jpg',
+            'https://upload.wikimedia.org/wikipedia/en/5/5a/Ramaiah_Institutions_Logo.png',
       ),
       CollegeCard(
+        i: 1,
         width: width,
         title: "RV College Of Engineering",
         address: "RR Nagar, Bangalore",
         imgUrl:
-            'https://www.iesonline.co.in/colleges-image/ramaiah-institute-of-technology.jpg',
+            'https://upload.wikimedia.org/wikipedia/en/5/5a/Ramaiah_Institutions_Logo.png',
       ),
     ];
     for (int i = 0; i < deets.colleges.length; i++) {
       collegeCards.add(CollegeCard(
+          i: collegeCards.length,
           width: width,
           title: deets.colleges[i].college.name,
           address: deets.colleges[i].address,
@@ -105,8 +159,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ),
         body: SingleChildScrollView(
-          // Center is a layout widget. It takes a single child and positions it
-          // in the middle of the parent.
+          physics: BouncingScrollPhysics(),
           child: Padding(
             padding: const EdgeInsets.only(top: 15.0),
             child: Column(
@@ -143,26 +196,13 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      discussCard(
-                        name: name,
-                        title: "How are we doing today?",
-                      ),
-                      discussCard(
-                        name: name,
-                        title: "What's the best college in Karantaka?",
-                      ),
-                      discussCard(
-                        name: name,
-                        title: "Omg, I failed every enterance test!",
-                      ),
-                      discussCard(
-                        name: name,
-                        title: "How to get into college without 12th?",
-                      ),
-                    ],
+                  physics: BouncingScrollPhysics(),
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 8.0, bottom: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: allDiscussions,
+                    ),
                   ),
                 )
               ],
