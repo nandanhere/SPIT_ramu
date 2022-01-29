@@ -1,6 +1,8 @@
 import 'package:college_helper/map_screen.dart';
 import 'package:flutter/material.dart';
 
+import 'home/screens/homePage.dart';
+
 void main() {
   runApp(const MyApp());
 }
