@@ -53,10 +53,21 @@ class _MapScreenState extends State<MapScreen> {
         position: LatLng(
             double.parse(v['lat'] ?? "0.0"), double.parse(v['lng'] ?? "0.0")),
         onTap: () {
-          print(v['id']);
-          setState(() {
-            selected = true;
-          });
+          showModalBottomSheet(
+              context: context,
+              backgroundColor: Colors.transparent,
+              builder: (BuildContext context) {
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 10.0),
+                  child: CollegeCard(
+                    width: width,
+                    title: "Ramaiah Institute Of Technology",
+                    address: "MSR Nagar, Bangalore",
+                    imgUrl:
+                        'https://www.iesonline.co.in/colleges-image/ramaiah-institute-of-technology.jpg',
+                  ),
+                );
+              });
         },
       ));
     });
@@ -77,25 +88,25 @@ class _MapScreenState extends State<MapScreen> {
           ),
         ),
       ),
-      body: selected
-          ? SlidingUpPanel(
-              renderPanelSheet: false,
-              panelBuilder: (_) => CollegeCard(
-                width: width,
-                title: "Ramaiah Institute Of Technology",
-                address: "MSR Nagar, Bangalore",
-                imgUrl:
-                    'https://www.iesonline.co.in/colleges-image/ramaiah-institute-of-technology.jpg',
-              ),
-              body: GoogleMap(
-                  onMapCreated: _onMapCreated,
-                  myLocationButtonEnabled: true,
-                  myLocationEnabled: true,
-                  initialCameraPosition:
-                      CameraPosition(zoom: 18, target: LatLng(lat, lng)),
-                  markers: {...marklist}),
-            )
-          : GoogleMap(
+      body:
+          // ? SlidingUpPanel(
+          //     renderPanelSheet: false,
+          // panelBuilder: (_) => CollegeCard(
+          //   width: width,
+          //   title: "Ramaiah Institute Of Technology",
+          //   address: "MSR Nagar, Bangalore",
+          //   imgUrl:
+          //       'https://www.iesonline.co.in/colleges-image/ramaiah-institute-of-technology.jpg',
+          // ),
+          //     body: GoogleMap(
+          //         onMapCreated: _onMapCreated,
+          //         myLocationButtonEnabled: true,
+          //         myLocationEnabled: true,
+          //         initialCameraPosition:
+          //             CameraPosition(zoom: 18, target: LatLng(lat, lng)),
+          //         markers: {...marklist}),
+          //   )
+          GoogleMap(
               onMapCreated: _onMapCreated,
               myLocationButtonEnabled: true,
               myLocationEnabled: true,
