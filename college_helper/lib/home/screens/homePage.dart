@@ -23,6 +23,22 @@ class _MyHomePageState extends State<MyHomePage> {
     int h = DateTime.now().hour;
 
     double height = MediaQuery.of(context).size.height;
+    List<Widget> collegeCards = [
+      CollegeCard(
+        width: width,
+        title: "Ramaiah Institute Of Technology",
+        address: "MSR Nagar, Bangalore",
+        imgUrl:
+            'https://www.iesonline.co.in/colleges-image/ramaiah-institute-of-technology.jpg',
+      ),
+      CollegeCard(
+        width: width,
+        title: "RV College Of Engineering",
+        address: "RR Nagar, Bangalore",
+        imgUrl:
+            'https://www.iesonline.co.in/colleges-image/ramaiah-institute-of-technology.jpg',
+      ),
+    ];
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,
@@ -73,20 +89,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 const SizedBox(
                   height: 15,
                 ),
-                CollegeCard(
-                  width: width,
-                  title: "Ramaiah Institute Of Technology",
-                  address: "MSR Nagar, Bangalore",
-                  imgUrl:
-                      'https://www.iesonline.co.in/colleges-image/ramaiah-institute-of-technology.jpg',
-                ),
-                CollegeCard(
-                  width: width,
-                  title: "RV College Of Engineering",
-                  address: "RR Nagar, Bangalore",
-                  imgUrl:
-                      'https://www.iesonline.co.in/colleges-image/ramaiah-institute-of-technology.jpg',
-                ),
+                ...collegeCards,
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0),
                   child: ElevatedButton(
