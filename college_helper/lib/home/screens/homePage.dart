@@ -14,6 +14,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 
+CollegeDetail deets = CollegeDetail(colleges: []);
+
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, required this.title}) : super(key: key);
   final String title;
@@ -41,7 +43,7 @@ class _MyHomePageState extends State<MyHomePage> {
         title: "How to get into college without 12th?",
         url: "https://www.google.com/"),
   ];
-  CollegeDetail deets = CollegeDetail(colleges: []);
+
   Future getCollegeDetails() async {
     final response = await http.get(Uri.parse(
         'https://fast-island-19739.herokuapp.com/api/college-details'));
@@ -111,14 +113,17 @@ class _MyHomePageState extends State<MyHomePage> {
             'https://upload.wikimedia.org/wikipedia/en/5/5a/Ramaiah_Institutions_Logo.png',
       ),
     ];
+    int ct = 2;
     for (int i = 0; i < deets.colleges.length; i++) {
       collegeCards.add(CollegeCard(
-          i: collegeCards.length,
+          i: ct,
           width: width,
           title: deets.colleges[i].college.name,
           address: deets.colleges[i].address,
           imgUrl: deets.colleges[i].imageUrls[0]));
+      ct += 1;
     }
+
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,

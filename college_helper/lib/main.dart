@@ -25,7 +25,6 @@ class MyApp extends StatelessWidget {
         ),
         routes: {
           MapScreen.routeName: (ctx) => MapScreen(),
-          CollegePage.routeName: (ctx) => CollegePage(),
           ChatPage.routeName: (ctx) => ChatPage(),
         });
   }

@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:college_helper/home/screens/collegePage.dart';
+import 'package:college_helper/home/screens/homePage.dart';
 import 'package:college_helper/home/utils/color_gen.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -22,13 +23,11 @@ class CollegeCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () =>
-          Navigator.of(context).pushNamed(CollegePage.routeName, arguments: {
-        "name": title,
-        "address": address,
-        'urls': [imgUrl],
-        'desc': "desc"
-      }),
+      onTap: () => Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => CollegePage(clg: deets.colleges[i])),
+      ),
       child: Container(
         margin: EdgeInsets.only(top: 10, right: 10, left: 10),
         width: width - 20,
