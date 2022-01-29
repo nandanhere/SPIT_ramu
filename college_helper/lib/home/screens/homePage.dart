@@ -65,7 +65,10 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     getCollegeDetails().then((value) {
-      deets = collegeDetailFromJson(value);
+      // deets = collegeDetailFromJson(value);
+      var dict = {"colleges": []};
+      dict['colleges']!.add(jsonDecode(value)['colleges'][0]);
+      deets = collegeDetailFromJson(jsonEncode(dict));
       setState(() {});
     });
     getDiscussions().then((value) {

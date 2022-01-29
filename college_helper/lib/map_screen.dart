@@ -48,7 +48,8 @@ class _MapScreenState extends State<MapScreen> {
         icon: BitmapDescriptor.defaultMarkerWithHue(200),
         flat: true,
         markerId: MarkerId(deets.colleges[i].id),
-        position: LatLng(v.coordinates[0], v.coordinates[1]),
+        position:
+            LatLng(v.coordinates[0] as double, v.coordinates[1] as double),
         onTap: () {
           showModalBottomSheet(
               context: context,

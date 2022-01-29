@@ -6,6 +6,7 @@ import 'package:dash_chat/dash_chat.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ChatPage extends StatefulWidget {
   static const routeName = "/chatPage";
@@ -30,6 +31,7 @@ class _ChatPageState extends State<ChatPage> {
     int expenditure = 9999999;
     int from = -1;
     int to = -1;
+    late SharedPreferences data;
     List<String> subjects = [];
     List<ChatMessage> messages = [
       ChatMessage(
@@ -45,6 +47,15 @@ class _ChatPageState extends State<ChatPage> {
           title: "Here are your Results",
         );
       }));
+    }
+
+    savePrefs() async {
+      data.setBool("dataThere", true);
+      data.setInt('from', from);
+      data.setInt('to', to);
+      data.setInt('expenditure', expenditure);
+      data.setString("username", username);
+      data.setStringList("subjects", subjects);
     }
 
     quickReply(val) {
@@ -70,6 +81,7 @@ class _ChatPageState extends State<ChatPage> {
         messages.add(ChatMessage(
             text: "We'll now show you your results",
             user: ChatUser(name: "Drishti")));
+        savePrefs();
         Timer(Duration(seconds: 3), () {
           goToHome();
         });
@@ -79,12 +91,6 @@ class _ChatPageState extends State<ChatPage> {
 // TODO: check here if previous data is available
 // if data is there :
     // count = 1
-    // messages = [
-    //   ChatMessage(
-    //     text: "do you have a particular cutoff you are searching for ?",
-    //     user: ChatUser(name: "Drishti"),
-    //   )
-    // ];
 
     onSend(ChatMessage chatmessage) {
       messages.add(chatmessage);
@@ -183,6 +189,8 @@ class _ChatPageState extends State<ChatPage> {
           messages.add(ChatMessage(
               text: "We'll now show you your results",
               user: ChatUser(name: "Drishti")));
+          savePrefs();
+
           Timer(Duration(seconds: 3), () {
             goToHome();
           });
@@ -201,48 +209,65 @@ class _ChatPageState extends State<ChatPage> {
       user: ChatUser(),
       onSend: onSend,
     );
-    return SafeArea(
-      child: Scaffold(
-          backgroundColor: Colors.white,
-          appBar: AppBar(
-            backgroundColor: Colors.white,
-            titleSpacing: 10,
-            elevation: 0,
-            centerTitle: false,
-            actions: [
-              Padding(
-                padding: const EdgeInsets.only(right: 8.0),
-                child: IconButton(
-                  onPressed: () {},
-                  icon: Image.asset(
-                    'assets/images/location.png',
-                    width: 38,
-                    height: 38,
-                  ),
+    return FutureBuilder(
+      future: SharedPreferences.getInstance(),
+      builder: (context, snapshot) {
+        data = snapshot.data as SharedPreferences;
+
+        if (data.getBool("dataThere") ?? false) {
+          username = data.getString("username") ?? "";
+          messages = [
+            ChatMessage(
+              text:
+                  "${username} ,do you have a particular cutoff you are searching for ?",
+              user: ChatUser(name: "Drishti"),
+            )
+          ];
+        }
+        return SafeArea(
+          child: Scaffold(
+              backgroundColor: Colors.white,
+              appBar: AppBar(
+                backgroundColor: Colors.white,
+                titleSpacing: 10,
+                elevation: 0,
+                centerTitle: false,
+                actions: [
+                  Padding(
+                    padding: const EdgeInsets.only(right: 8.0),
+                    child: IconButton(
+                      onPressed: () {},
+                      icon: Image.asset(
+                        'assets/images/location.png',
+                        width: 38,
+                        height: 38,
+                      ),
+                    ),
+                  )
+                ],
+                title: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SizedBox(width: 5),
+                    Text(
+                      (h > 6 && h < 12)
+                          ? "Good Morning!"
+                          : (h <= 17)
+                              ? "Good Afternoon!"
+                              : "Good Evening!",
+                      // style: TextStyle(fontSize: 35, color: Color(0xff595959)),
+                      style: GoogleFonts.raleway(
+                          textStyle: const TextStyle(
+                              fontSize: 30, color: Color(0xff060606))),
+                    )
+                  ],
                 ),
-              )
-            ],
-            title: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SizedBox(width: 5),
-                Text(
-                  (h > 6 && h < 12)
-                      ? "Good Morning!"
-                      : (h <= 17)
-                          ? "Good Afternoon!"
-                          : "Good Evening!",
-                  // style: TextStyle(fontSize: 35, color: Color(0xff595959)),
-                  style: GoogleFonts.raleway(
-                      textStyle: const TextStyle(
-                          fontSize: 30, color: Color(0xff060606))),
-                )
-              ],
-            ),
-          ),
-          body:
-              currentChat // This trailing comma makes auto-formatting nicer for build methods.
-          ),
+              ),
+              body:
+                  currentChat // This trailing comma makes auto-formatting nicer for build methods.
+              ),
+        );
+      },
     );
   }
 }
