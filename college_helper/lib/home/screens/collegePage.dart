@@ -3,14 +3,25 @@ import 'package:college_helper/map_screen.dart';
 import 'package:flutter/material.dart';
 
 class CollegePage extends StatelessWidget {
-  final collegeName;
-  final urls;
-  final desc;
-  const CollegePage({Key? key, this.collegeName, this.urls, this.desc})
-      : super(key: key);
+  static const routeName = "/collegePage";
+
+  String collegeName = "None";
+  String address = 'placeholder_Address';
+  List<String> urls = [];
+  String desc = "desc";
+  CollegePage({
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final Object? args = ModalRoute.of(context)?.settings.arguments;
+    if (args != null) {
+      collegeName = (args as Map)['name'];
+      urls = (args as Map)['urls'];
+      desc = (args as Map)['desc'];
+      address = (args as Map)['address'];
+    }
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,
@@ -44,8 +55,8 @@ class CollegePage extends StatelessWidget {
                 const SizedBox(
                   height: 15,
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 5.0),
+                const Padding(
+                  padding: EdgeInsets.only(top: 5.0),
                   child: TitleText(title: "Discussions"),
                 ),
               ],
@@ -71,6 +82,5 @@ class CollegePage extends StatelessWidget {
         ), // This trailing comma makes auto-formatting nicer for build methods.
       ),
     );
-    ;
   }
 }
