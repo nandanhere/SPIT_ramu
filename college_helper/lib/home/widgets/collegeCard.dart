@@ -23,9 +23,10 @@ class CollegeCard extends StatelessWidget {
     return InkWell(
       onTap: () =>
           Navigator.of(context).pushNamed(CollegePage.routeName, arguments: {
-        "title": title,
+        "name": title,
         "address": address,
-        'urls': [imgUrl]
+        'urls': [imgUrl],
+        'desc': "desc"
       }),
       child: Container(
         margin: EdgeInsets.only(top: 10, right: 10, left: 10),
