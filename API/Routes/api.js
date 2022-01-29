@@ -5,7 +5,8 @@ const College = require('../Models/Colleges');
 router.get('/college-details', async (req, res) => {
 
     try{
-        const response = College.find({});
+        const response = await College.find({});
+        console.log(response)
         res.status(200).json({colleges : response});
     }
     catch(err){
@@ -36,3 +37,5 @@ router.post('/add-college', async (req,res)=> {
         res.status(500).json("Error" + err);
     }
 })
+
+module.exports = router;

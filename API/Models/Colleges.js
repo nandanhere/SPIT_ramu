@@ -29,7 +29,7 @@ const CollegeSchema=new Schema({
         required: true,
     },
     branch : {
-        name : {
+        bname : {
             type : String,
             required : true,
         },
@@ -45,6 +45,6 @@ const CollegeSchema=new Schema({
     
 })
 
-const Colege=mongoose.model('users',CollegeSchema)
+const College=mongoose.model('users',CollegeSchema)
 
 module.exports = College;
