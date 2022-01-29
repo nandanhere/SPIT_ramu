@@ -4,8 +4,10 @@ import 'package:college_helper/home/widgets/collegeCard.dart';
 import 'package:college_helper/home/widgets/discussCard.dart';
 import 'package:college_helper/home/widgets/titleText.dart';
 import 'package:college_helper/map_screen.dart';
+import 'package:college_helper/models/collegeDetails.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart' as http;
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, required this.title}) : super(key: key);
@@ -16,12 +18,29 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  CollegeDetail deets = CollegeDetail(colleges: []);
+  Future getCollegeDetails() async {
+    final response = await http.get(Uri.parse(
+        'https://fast-island-19739.herokuapp.com/api/college-details'));
+    if (response.statusCode == 200) {
+      return response.body;
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getCollegeDetails().then((value) {
+      deets = collegeDetailFromJson(value);
+      setState(() {});
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     String name = "Jayant Sogikar";
     double width = MediaQuery.of(context).size.width;
     int h = DateTime.now().hour;
-
     double height = MediaQuery.of(context).size.height;
     List<Widget> collegeCards = [
       CollegeCard(
@@ -39,6 +58,13 @@ class _MyHomePageState extends State<MyHomePage> {
             'https://www.iesonline.co.in/colleges-image/ramaiah-institute-of-technology.jpg',
       ),
     ];
+    for (int i = 0; i < deets.colleges.length; i++) {
+      collegeCards.add(CollegeCard(
+          width: width,
+          title: deets.colleges[i].college.name,
+          address: deets.colleges[i].address,
+          imgUrl: deets.colleges[i].imageUrls[0]));
+    }
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,
@@ -111,7 +137,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                         BorderSide(color: Colors.red[200]!)))),
                   ),
                 ),
-                Padding(
+                const Padding(
                   padding: const EdgeInsets.only(top: 5.0),
                   child: TitleText(title: "Discussions"),
                 ),
