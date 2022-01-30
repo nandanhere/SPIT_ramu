@@ -31,7 +31,7 @@
     <key>NSLocationUsageDescription</key>
     <string>Older devices need location.</string>
     <key>NSLocationAlwaysUsageDescription</key>
-    <string>Can I haz location always?</string>
+    <string>Can I have your location always?</string>
 
 	<key>LSRequiresIPhoneOS</key>
 	<true/>

@@ -1,5 +1,7 @@
 import 'dart:io';
 import 'dart:ui';
+import 'package:college_helper/home/widgets/collegeCard.dart';
+import 'package:college_helper/models/collegeDetails.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
@@ -14,72 +16,81 @@ class MapScreen extends StatefulWidget {
 class _MapScreenState extends State<MapScreen> {
   LatLng _pickedLocation = LatLng(0.0, 0.0);
   String address = "";
-  void _selectLocation(LatLng position) async {
-    setState(() {
-      _pickedLocation = position;
-      address = "";
-    });
-    try {
-      address = await LocationHelper.getPlaceAddress(
-          position.latitude, position.longitude);
-    } finally {}
+  bool selected = false;
+
+  _onMapCreated(GoogleMapController controller) {
+    if (mounted) {
+      setState(() {
+        controller.setMapStyle(""" [
+    {
+      "featureType": "poi",
+      "stylers": [
+        { "visibility": "off" }
+      ]
+    }
+  ]""");
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
     final Object? args = ModalRoute.of(context)?.settings.arguments;
-    Map<String, Map<String, String>> potholes = (args! as Map)['potholes'];
     double lat = double.parse((args as Map)['lat']);
-
+    CollegeDetail deets = (args as Map)['deets'];
+    print(deets.colleges.length);
     double lng = double.parse((args as Map)['lng']);
     List<Marker> marklist = [];
-    potholes.forEach((k, v) {
-      print(k);
-      print(v);
-      print("marklist made");
+    for (int i = 0; i < deets.colleges.length; i++) {
+      CollegeElement v = deets.colleges[i];
       marklist.add(Marker(
         icon: BitmapDescriptor.defaultMarkerWithHue(200),
         flat: true,
-        markerId: MarkerId(k),
-        position: LatLng(
-            double.parse(v['lat'] ?? "0.0"), double.parse(v['lng'] ?? "0.0")),
-        onTap: () => print(v['id']),
+        markerId: MarkerId(deets.colleges[i].id),
+        position:
+            LatLng(v.coordinates[0] as double, v.coordinates[1] as double),
+        onTap: () {
+          showModalBottomSheet(
+              context: context,
+              backgroundColor: Colors.transparent,
+              builder: (BuildContext context) {
+                return Padding(
+                    padding: const EdgeInsets.only(bottom: 10.0),
+                    child: CollegeCard(
+                        i: i,
+                        width: width,
+                        title: v.college.name,
+                        address: v.address,
+                        imgUrl: v.imageUrls[0]));
+              });
+        },
       ));
-    });
+    }
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xfff0f0f0),
-        shape: RoundedRectangleBorder(
+        backgroundColor: const Color(0xfff0f0f0),
+        shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
             bottomLeft: Radius.circular(20),
             bottomRight: Radius.circular(20),
           ),
         ),
-        iconTheme: IconThemeData(color: Colors.black),
-        title: FittedBox(
+        iconTheme: const IconThemeData(color: Colors.black),
+        title: const FittedBox(
           child: Text(
-            "Register a complaint",
+            "Colleges Near you",
             style: TextStyle(color: Colors.black),
           ),
         ),
       ),
-      body: Stack(
-        children: [
-          GoogleMap(
-              myLocationButtonEnabled: true,
-              myLocationEnabled: true,
-              initialCameraPosition:
-                  CameraPosition(zoom: 18, target: LatLng(lat, lng)),
-              markers: {...marklist}),
-          Container(
-            height: MediaQuery.of(context).size.height * 5 / 6,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.end,
-            ),
-          )
-        ],
-      ),
+      body: GoogleMap(
+          onMapCreated: _onMapCreated,
+          myLocationButtonEnabled: true,
+          myLocationEnabled: true,
+          initialCameraPosition:
+              CameraPosition(zoom: 15, target: LatLng(lat, lng)),
+          markers: {...marklist}),
     );
   }
 }

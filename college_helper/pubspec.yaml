@@ -42,6 +42,11 @@ dependencies:
   google_maps_flutter: ^2.1.1
   location: ^4.3.0
   http: ^0.13.4
+  url_launcher: ^6.0.18
+  dash_chat: ^1.1.16
+  carousel_slider: ^4.0.0
+  shared_preferences: ^2.0.12
+  geolocator: ^8.0.5
 
 
 dev_dependencies:
