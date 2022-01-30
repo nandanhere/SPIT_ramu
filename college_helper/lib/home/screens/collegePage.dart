@@ -101,9 +101,7 @@ class _CollegePageState extends State<CollegePage> {
                       desiredAccuracy: LocationAccuracy.high);
                   Navigator.of(context)
                       .pushNamed(MapScreen.routeName, arguments: {
-                    "deets": [
-                      CollegeDetail(colleges: [widget.clg])
-                    ],
+                    "deets": CollegeDetail(colleges: [widget.clg]),
                     "location": "myLocation",
                     "colleges": [],
                     'lat': widget.clg.coordinates[0].toString(),
