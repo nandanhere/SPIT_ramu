@@ -154,7 +154,18 @@ class _MyHomePageState extends State<MyHomePage> {
             Padding(
               padding: const EdgeInsets.only(right: 8.0),
               child: IconButton(
-                onPressed: () {},
+                onPressed: () async {
+                  Position position = await Geolocator.getCurrentPosition(
+                      desiredAccuracy: LocationAccuracy.high);
+                  Navigator.of(context)
+                      .pushNamed(MapScreen.routeName, arguments: {
+                    "deets": deets,
+                    "location": "myLocation",
+                    "colleges": [],
+                    'lat': position.latitude.toString(),
+                    'lng': position.longitude.toString()
+                  });
+                },
                 icon: Image.asset(
                   'assets/images/location.png',
                   width: 38,
@@ -202,20 +213,13 @@ class _MyHomePageState extends State<MyHomePage> {
                               fontSize: 16, color: Color(0xff565656))),
                     ),
                     onPressed: () async {
-                      Map<String, Map<String, String>> colleges = {
-                        "MSRIT": {
-                          "id": "Ramaiah",
-                          "lat": "13.038293",
-                          "lng": "77.566676"
-                        }
-                      };
                       Position position = await Geolocator.getCurrentPosition(
                           desiredAccuracy: LocationAccuracy.high);
                       Navigator.of(context)
                           .pushNamed(MapScreen.routeName, arguments: {
                         "deets": deets,
                         "location": "myLocation",
-                        "colleges": colleges,
+                        "colleges": [],
                         'lat': position.latitude.toString(),
                         'lng': position.longitude.toString()
                       });

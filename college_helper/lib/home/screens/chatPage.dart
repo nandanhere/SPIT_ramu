@@ -88,10 +88,6 @@ class _ChatPageState extends State<ChatPage> {
       }
     }
 
-// TODO: check here if previous data is available
-// if data is there :
-    // count = 1
-
     onSend(ChatMessage chatmessage) {
       messages.add(chatmessage);
       switch (count) {
@@ -203,16 +199,20 @@ class _ChatPageState extends State<ChatPage> {
       count += 1;
     }
 
+    FocusNode foc = FocusNode();
     DashChat currentChat = DashChat(
+      focusNode: foc,
+      sendOnEnter: true,
       onQuickReply: quickReply,
       messages: messages,
       user: ChatUser(),
       onSend: onSend,
     );
+
     return FutureBuilder(
       future: SharedPreferences.getInstance(),
       builder: (context, snapshot) {
-        if (snapshot.data == null) {
+        if (snapshot.hasData == false) {
           return CircularProgressIndicator();
         }
         data = snapshot.data as SharedPreferences;

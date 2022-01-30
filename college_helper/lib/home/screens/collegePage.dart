@@ -7,6 +7,7 @@ import 'package:college_helper/home/widgets/titleText.dart';
 import 'package:college_helper/map_screen.dart';
 import 'package:college_helper/models/collegeDetails.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -95,7 +96,20 @@ class _CollegePageState extends State<CollegePage> {
             Padding(
               padding: const EdgeInsets.only(right: 8.0),
               child: IconButton(
-                onPressed: () {},
+                onPressed: () async {
+                  Position position = await Geolocator.getCurrentPosition(
+                      desiredAccuracy: LocationAccuracy.high);
+                  Navigator.of(context)
+                      .pushNamed(MapScreen.routeName, arguments: {
+                    "deets": [
+                      CollegeDetail(colleges: [widget.clg])
+                    ],
+                    "location": "myLocation",
+                    "colleges": [],
+                    'lat': widget.clg.coordinates[0].toString(),
+                    'lng': widget.clg.coordinates[1].toString(),
+                  });
+                },
                 icon: Image.asset(
                   'assets/images/location.png',
                   width: 38,
