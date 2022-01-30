@@ -21,8 +21,6 @@ mongoose.connect(dbURI,{useNewUrlParser:true,useUnifiedTopology:true})
 })
 
 
-
-
 app.use('/api', api);
 
 app.listen(port , () => {
